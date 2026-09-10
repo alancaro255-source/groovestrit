@@ -1,26 +1,48 @@
+import os
+import sqlite3
+
 from flask import Flask, render_template, request
-import mysql.connector
-from mysql.connector import Error
 
 app = Flask(__name__)
 
-DB_CONFIG = {
-    'host': 'localhost',
-    'user': 'alan',
-    'password': '12345678',
-    'database': 'wallstreet_db',
-    'autocommit': True,
-}
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, 'wallstreet.db')
 
 
 def conectar_db():
-    return mysql.connector.connect(**DB_CONFIG)
+    conexion = sqlite3.connect(DB_PATH)
+    conexion.row_factory = sqlite3.Row
+    return conexion
+
+
+def inicializar_db():
+    conexion = conectar_db()
+    cursor = conexion.cursor()
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS usuarios (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL,
+            correo TEXT NOT NULL UNIQUE,
+            telefono TEXT NOT NULL,
+            fecha_nac TEXT NOT NULL,
+            rol TEXT DEFAULT 'usuario' CHECK(rol IN ('usuario', 'admin')),
+            fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+        """
+    )
+    conexion.commit()
+    cursor.close()
+    conexion.close()
+
+
+inicializar_db()
 
 
 def obtener_usuarios(limit=None):
     try:
         conexion = conectar_db()
-        cursor = conexion.cursor(dictionary=True)
+        cursor = conexion.cursor()
 
         if limit:
             cursor.execute(
@@ -28,7 +50,7 @@ def obtener_usuarios(limit=None):
                 SELECT id, nombre, correo, telefono, fecha_nac, rol, fecha_registro
                 FROM usuarios
                 ORDER BY id DESC
-                LIMIT %s
+                LIMIT ?
                 """,
                 (limit,)
             )
@@ -41,12 +63,12 @@ def obtener_usuarios(limit=None):
                 """
             )
 
-        usuarios = cursor.fetchall()
+        usuarios = [dict(row) for row in cursor.fetchall()]
         cursor.close()
         conexion.close()
         return usuarios, None
-    except Error as e:
-        return [], f"No se pudo conectar a MySQL: {e}"
+    except sqlite3.Error as e:
+        return [], f"No se pudo conectar a SQLite: {e}"
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -71,7 +93,7 @@ def home():
                 cursor.execute(
                     """
                     INSERT INTO usuarios (nombre, correo, telefono, fecha_nac, rol)
-                    VALUES (%s, %s, %s, %s, %s)
+                    VALUES (?, ?, ?, ?, ?)
                     """,
                     (nombre, correo, telefono, fecha_nac, 'usuario')
                 )
@@ -80,7 +102,7 @@ def home():
                 conexion.close()
                 mensaje = f'Registro exitoso para {nombre}.'
                 usuarios, db_error = obtener_usuarios(limit=10)
-            except Error as e:
+            except sqlite3.Error as e:
                 error = f'Error al guardar en la base de datos: {e}'
 
     return render_template(
@@ -125,12 +147,12 @@ def admin():
                         cursor.execute(
                             """
                             UPDATE usuarios
-                            SET nombre = %s,
-                                correo = %s,
-                                telefono = %s,
-                                fecha_nac = %s,
-                                rol = %s
-                            WHERE id = %s
+                            SET nombre = ?,
+                                correo = ?,
+                                telefono = ?,
+                                fecha_nac = ?,
+                                rol = ?
+                            WHERE id = ?
                             """,
                             (nombre, correo, telefono, fecha_nac, rol, usuario_id)
                         )
@@ -138,7 +160,7 @@ def admin():
                         cursor.close()
                         conexion.close()
                         mensaje = 'Usuario actualizado correctamente.'
-                    except Error as e:
+                    except sqlite3.Error as e:
                         error = f'No se pudo actualizar el usuario: {e}'
 
         elif accion == 'eliminar':
@@ -148,12 +170,12 @@ def admin():
                 try:
                     conexion = conectar_db()
                     cursor = conexion.cursor()
-                    cursor.execute("DELETE FROM usuarios WHERE id = %s", (usuario_id,))
+                    cursor.execute("DELETE FROM usuarios WHERE id = ?", (usuario_id,))
                     conexion.commit()
                     cursor.close()
                     conexion.close()
                     mensaje = 'Usuario eliminado correctamente.'
-                except Error as e:
+                except sqlite3.Error as e:
                     error = f'No se pudo eliminar el usuario: {e}'
 
     usuarios, db_error = obtener_usuarios()
