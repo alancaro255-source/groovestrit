@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo | Wall Street</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;700;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+            padding-top: 80px;
+        }
+
+        a { text-decoration: none; }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background: rgba(10, 10, 10, 0.95);
+            border-bottom: 2px solid #2ea043;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo a {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 32px;
+            color: #fff;
+            text-decoration: none;
+            text-shadow: 0 0 10px rgba(46,160,67,0.8);
+        }
+
+        .title {
+            font-family: 'Bebas Neue', sans-serif;
+            color: #2ea043;
+            font-size: 35px;
+            letter-spacing: 3px;
+        }
+
+        .menu-btn {
+            font-size: 30px;
+            background: none;
+            border: none;
+            color: #2ea043;
+            cursor: pointer;
+            display: block;
+        }
+
+        .nav-links {
+            display: none;
+            position: absolute;
+            top: 70px;
+            right: 5%;
+            background: #111;
+            padding: 20px;
+            border: 1px solid #2ea043;
+            border-radius: 10px;
+            flex-direction: column;
+            gap: 15px;
+            box-shadow: 0 10px 24px rgba(0,0,0,0.4);
+        }
+
+        .nav-links.active { display: flex; }
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+
+        .nav-links a:hover { color: #2ea043; }
+
+        .hero {
+            width: min(1200px, 90%);
+            margin: 40px auto 0;
+            background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.7)),
+                url('https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1200&q=80') center/cover;
+            border-radius: 26px;
+            padding: 90px 40px;
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .eyebrow {
+            color: #2ea043;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .hero h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(44px, 7vw, 94px);
+            color: #fff;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            max-width: 760px;
+            line-height: 1.7;
+            color: #e5e5e5;
+        }
+
+        .filter-bar {
+            width: min(1200px, 90%);
+            margin: 30px auto 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .filter-pill {
+            background: #111;
+            border: 1px solid rgba(46,160,67,0.6);
+            color: #fff;
+            border-radius: 999px;
+            padding: 10px 16px;
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+
+        .container { width: min(1200px, 90%); margin: 40px auto; }
+
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            text-align: left;
+            font-size: clamp(34px, 5vw, 54px);
+            color: #2ea043;
+            margin-bottom: 24px;
+            letter-spacing: 1px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 28px;
+        }
+
+        .card {
+            background: #111;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: 0.3s ease;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(46,160,67,0.8);
+            box-shadow: 0 18px 32px rgba(46, 160, 67, 0.12);
+        }
+
+        .card img {
+            width: 100%;
+            height: 360px;
+            object-fit: cover;
+            transition: 0.5s ease;
+        }
+
+        .card:hover img {
+            transform: scale(1.05);
+            filter: brightness(0.8);
+        }
+
+        .card-info {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 18px 18px 20px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.92));
+        }
+
+        .card-tag {
+            font-size: 11px;
+            color: #9ae6b4;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .card-info h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .card-price {
+            color: #fff;
+            font-weight: 800;
+            color: #2ea043;
+        }
+
+        .promo {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 28px;
+            margin-top: 70px;
+        }
+
+        .promo-large {
+            background: linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.65)),
+                url('https://images.unsplash.com/photo-1504593811423-6dd665756598?auto=format&fit=crop&w=1200&q=80') center/cover;
+            min-height: 420px;
+            border-radius: 22px;
+            padding: 32px;
+            display: flex;
+            align-items: end;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .promo-copy {
+            max-width: 460px;
+        }
+
+        .promo-copy h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(34px, 5vw, 56px);
+            margin-bottom: 12px;
+        }
+
+        .promo-copy p {
+            color: #f0f0f0;
+            line-height: 1.7;
+            margin-bottom: 18px;
+        }
+
+        .promo-stack {
+            display: grid;
+            gap: 22px;
+        }
+
+        .promo-mini {
+            background: #111;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.08);
+            overflow: hidden;
+        }
+
+        .promo-mini img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .promo-mini .content {
+            padding: 18px;
+        }
+
+        .promo-mini h4 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 30px;
+            color: #2ea043;
+            margin-bottom: 8px;
+        }
+
+        .promo-mini p {
+            color: #ddd;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: #050505;
+            border-top: 1px solid #2ea043;
+            margin-top: 50px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 20px;
+            color: #555;
+        }
+
+        @media (max-width: 768px) {
+            .title { font-size: 24px; }
+            .promo { grid-template-columns: 1fr; }
+            .hero { padding: 70px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo"><a href="/">GROVE ST</a></div>
+        <div class="title">WALL STREET</div>
+        <button class="menu-btn" id="menuBtn">☰</button>
+        <nav class="nav-links" id="navLinks">
+            <a href="/">Inicio</a>
+            <a href="/catalogo">Catálogo</a>
+            <a href="/admin">Panel Admin</a>
+        </nav>
+    </header>
+
+    <main class="hero">
+        <div class="eyebrow">Nueva temporada</div>
+        <h1>Colección urbana</h1>
+        <p>Un estilo más fresco, más auténtico y más fuerte. Explora ropa cómoda, potente y diseñada para destacar en cada calle.</p>
+    </main>
+
+    <div class="filter-bar">
+        <span class="filter-pill">Todo</span>
+        <span class="filter-pill">Oversize</span>
+        <span class="filter-pill">Mujer</span>
+        <span class="filter-pill">Hombre</span>
+        <span class="filter-pill">Baggy</span>
+        <span class="filter-pill">Accesorios</span>
+    </div>
+
+    <main class="container">
+        <h2 class="section-title">Colección exclusiva</h2>
+        <div class="grid">
+            <a class="card" href="/gta-1">
+                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80" alt="Ropa femenina">
+                <div class="card-info">
+                    <div class="card-tag">Los Santos</div>
+                    <h3>Ropa femenina</h3>
+                    <span class="card-price">desde $999</span>
+                </div>
+            </a>
+
+            <a class="card" href="/gta-2">
+                <img src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?auto=format&fit=crop&w=600&q=80" alt="Ropa masculina">
+                <div class="card-info">
+                    <div class="card-tag">San Fierro</div>
+                    <h3>Ropa masculina</h3>
+                    <span class="card-price">desde $1,099</span>
+                </div>
+            </a>
+
+            <a class="card" href="/gta-3">
+                <img src="https://images.unsplash.com/photo-1550614000-4b95d4ebf551?auto=format&fit=crop&w=600&q=80" alt="Baggi VIP">
+                <div class="card-info">
+                    <div class="card-tag">Las Venturas</div>
+                    <h3>Baggi VIP</h3>
+                    <span class="card-price">desde $1,299</span>
+                </div>
+            </a>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1618354691438-25af04c5144f?auto=format&fit=crop&w=600&q=80" alt="Come on girl">
+                <div class="card-info">
+                    <div class="card-tag">New drop</div>
+                    <h3>Come on girl</h3>
+                    <span class="card-price">desde $1,149</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1506626462723-66f81fc76a47?auto=format&fit=crop&w=600&q=80" alt="Nosotros">
+                <div class="card-info">
+                    <div class="card-tag">Classic</div>
+                    <h3>Nosotros</h3>
+                    <span class="card-price">desde $1,199</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1511556820780-d912e42b4980?auto=format&fit=crop&w=600&q=80" alt="Come on men">
+                <div class="card-info">
+                    <div class="card-tag">Street fit</div>
+                    <h3>Come on men</h3>
+                    <span class="card-price">desde $1,249</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="promo">
+            <div class="promo-large">
+                <div class="promo-copy">
+                    <div class="eyebrow">Edición limitada</div>
+                    <h3>Drop de la semana</h3>
+                    <p>Prendas con un corte amplio, acabados premium y una vibra urbana que se ve desde lejos.</p>
+                    <a href="/" class="btn">Ver más</a>
+                </div>
+            </div>
+
+            <div class="promo-stack">
+                <div class="promo-mini">
+                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80" alt="Streetwear extra">
+                    <div class="content">
+                        <h4>Street layers</h4>
+                        <p>Camisetas, sudaderas y parkas para looks completos y funcionales.</p>
+                    </div>
+                </div>
+
+                <div class="promo-mini">
+                    <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=900&q=80" alt="Women urban">
+                    <div class="content">
+                        <h4>Urban women</h4>
+                        <p>Prendas suaves, relajadas y con un perfil moderno para cada día.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>WWW.WALLSTREET.COM</footer>
+
+    <script>
+        const btn = document.getElementById('menuBtn');
+        const nav = document.getElementById('navLinks');
+        btn.addEventListener('click', () => { nav.classList.toggle('active'); });
+    </script>
+</body>
+</html>

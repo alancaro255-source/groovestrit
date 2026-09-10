@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin | Wall Street</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0a0a0a;
+            color: #fff;
+            padding: 40px 20px;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2ea043;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px;
+            color: #2ea043;
+            letter-spacing: 2px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: #fff;
+            background: #111;
+            border: 1px solid #2ea043;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+
+        .nav a:hover {
+            background: #2ea043;
+            color: #000;
+        }
+
+        .alerta {
+            margin-bottom: 24px;
+            padding: 14px 18px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .alerta.success {
+            background: rgba(46, 160, 67, 0.15);
+            border: 1px solid #2ea043;
+            color: #aef0b5;
+        }
+
+        .alerta.error {
+            background: rgba(255, 85, 85, 0.12);
+            border: 1px solid #ff5c5c;
+            color: #ffb0b0;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .user-card {
+            background: #111;
+            border: 1px solid #2ea043;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 0 18px rgba(46, 160, 67, 0.15);
+        }
+
+        .user-card h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 30px;
+            color: #2ea043;
+            margin-bottom: 18px;
+            letter-spacing: 1px;
+        }
+
+        .user-form {
+            display: grid;
+            gap: 14px;
+        }
+
+        .field {
+            display: grid;
+            gap: 6px;
+        }
+
+        label {
+            font-weight: 700;
+            color: #ddd;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #1a1a1a;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        input:focus, select:focus {
+            outline: 2px solid #2ea043;
+            border-color: #2ea043;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        button {
+            padding: 10px 14px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .guardar {
+            background: #2ea043;
+            color: #fff;
+        }
+
+        .guardar:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        .eliminar {
+            background: #d13a3a;
+            color: #fff;
+        }
+
+        .eliminar:hover {
+            background: #ff6b6b;
+            color: #000;
+        }
+
+        @media (max-width: 768px) {
+            .actions {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">WALL STREET ADMIN</div>
+            <nav class="nav">
+                <a href="/">Inicio</a>
+                <a href="/catalogo">Catálogo</a>
+                <a href="/admin">Panel Admin</a>
+            </nav>
+        </header>
+
+        {% if mensaje %}
+            <div class="alerta success">{{ mensaje }}</div>
+        {% endif %}
+
+        {% if error %}
+            <div class="alerta error">{{ error }}</div>
+        {% endif %}
+
+        <div class="cards">
+            {% for usuario in usuarios %}
+                <div class="user-card">
+                    <h3>#{{ usuario.id }} {{ usuario.nombre }}</h3>
+
+                    <form method="POST" action="/admin" class="user-form">
+                        <input type="hidden" name="accion" value="editar">
+                        <input type="hidden" name="id" value="{{ usuario.id }}">
+
+                        <div class="field">
+                            <label>Nombre</label>
+                            <input type="text" name="nombre" value="{{ usuario.nombre }}" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Correo</label>
+                            <input type="email" name="correo" value="{{ usuario.correo }}" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Teléfono</label>
+                            <input type="text" name="telefono" value="{{ usuario.telefono }}" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Fecha de nacimiento</label>
+                            <input type="date" name="fecha_nac" value="{{ usuario.fecha_nac }}" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Rol</label>
+                            <select name="rol" required>
+                                <option value="usuario" {% if usuario.rol == 'usuario' %}selected{% endif %}>usuario</option>
+                                <option value="admin" {% if usuario.rol == 'admin' %}selected{% endif %}>admin</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label>Fecha registro</label>
+                            <input type="text" value="{{ usuario.fecha_registro }}" readonly>
+                        </div>
+
+                        <div class="actions">
+                            <button type="submit" class="guardar">Guardar cambios</button>
+                        </div>
+                    </form>
+
+                    <form method="POST" action="/admin" onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?')">
+                        <input type="hidden" name="accion" value="eliminar">
+                        <input type="hidden" name="id" value="{{ usuario.id }}">
+
+                        <div class="actions">
+                            <button type="submit" class="eliminar">Eliminar usuario</button>
+                        </div>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

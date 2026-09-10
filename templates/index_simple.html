@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grove Street | Wall Street</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;700;900&display=swap');
+
+        :root {
+            --bg: #0b0b0b;
+            --panel: #141414;
+            --panel-2: #1d1d1d;
+            --line: rgba(255,255,255,0.08);
+            --green: #2ea043;
+            --green-soft: #a4f0b3;
+            --text: #f4f4f4;
+            --muted: #c5c5c5;
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        img { display: block; max-width: 100%; }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 16px 5%;
+            background: rgba(11, 11, 11, 0.92);
+            border-bottom: 1px solid var(--line);
+            backdrop-filter: blur(10px);
+        }
+
+        .brand {
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 0.06em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand strong {
+            color: var(--green-soft);
+            font-size: 2.1rem;
+            text-shadow: 0 0 18px rgba(46,160,67,0.7);
+        }
+
+        .brand span {
+            color: #fff;
+            font-size: 1.2rem;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            color: var(--muted);
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .nav a:hover { color: var(--green-soft); }
+
+        .nav .cta {
+            background: var(--green);
+            color: #fff;
+            border-radius: 999px;
+            padding: 10px 18px;
+        }
+
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.72)),
+                url('https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .hero-inner {
+            width: min(1200px, 90%);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.4fr 0.8fr;
+            gap: 26px;
+            align-items: center;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(46,160,67,0.14);
+            border: 1px solid rgba(46,160,67,0.6);
+            color: var(--green-soft);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            margin: 0;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(3rem, 7vw, 6.8rem);
+            letter-spacing: 0.04em;
+            line-height: 0.9;
+            text-transform: uppercase;
+            color: #fff;
+        }
+
+        .hero p {
+            max-width: 720px;
+            margin: 18px 0 24px;
+            font-size: 1.05rem;
+            color: #ececec;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 26px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 46px;
+            padding: 0 22px;
+            border-radius: 999px;
+            background: var(--green);
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border: 1px solid transparent;
+        }
+
+        .btn.secondary {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.18);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            max-width: 700px;
+        }
+
+        .stat {
+            padding: 16px 18px;
+            border-radius: 16px;
+            background: rgba(17, 17, 17, 0.75);
+            border: 1px solid var(--line);
+        }
+
+        .stat strong {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 2rem;
+            font-family: 'Bebas Neue', sans-serif;
+            color: var(--green-soft);
+        }
+
+        .stat span {
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
+
+        .panel {
+            background: rgba(20,20,20,0.85);
+            border: 1px solid rgba(46,160,67,0.5);
+            border-radius: 22px;
+            padding: 22px;
+            box-shadow: 0 20px 48px rgba(0,0,0,0.35);
+        }
+
+        .panel h3 {
+            margin: 0 0 12px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.2rem;
+            letter-spacing: 0.04em;
+            color: var(--green-soft);
+        }
+
+        .panel p {
+            margin: 0 0 16px;
+            color: var(--muted);
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tags span {
+            display: inline-flex;
+            padding: 7px 11px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: #1a1a1a;
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #e7e7e7;
+        }
+
+        .panel-visual {
+            margin-top: 16px;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(46,160,67,0.45);
+            background: #111;
+        }
+
+        .panel-visual img {
+            display: block;
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .music {
+            margin-top: 16px;
+            width: 100%;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.02);
+            color: var(--text);
+            border-radius: 999px;
+            padding: 10px 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .section {
+            width: min(1200px, 90%);
+            margin: 52px auto;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .section-head h2 {
+            margin: 0;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.2rem, 4vw, 3.7rem);
+            letter-spacing: 0.04em;
+        }
+
+        .section-head p {
+            margin: 0;
+            color: var(--muted);
+            max-width: 560px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 22px;
+        }
+
+        .card {
+            display: block;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            overflow: hidden;
+        }
+
+        .card-image {
+            position: relative;
+            height: 280px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            padding: 7px 10px;
+            border-radius: 999px;
+            background: rgba(46,160,67,0.95);
+            color: #031b08;
+            font-size: 0.66rem;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .card-body {
+            padding: 18px 18px 20px;
+        }
+
+        .card-tag {
+            color: var(--green-soft);
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .card h3 {
+            margin: 0;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 0.04em;
+        }
+
+        .card-meta {
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            color: var(--muted);
+            font-size: 0.86rem;
+        }
+
+        .price {
+            color: var(--green-soft);
+            font-weight: 800;
+            font-size: 1.08rem;
+        }
+
+        .story {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 22px;
+        }
+
+        .story-main {
+            min-height: 300px;
+            border-radius: 22px;
+            border: 1px solid var(--line);
+            background: linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.7)),
+                url('https://images.unsplash.com/photo-1504593811423-6dd665756598?auto=format&fit=crop&w=1200&q=80') center/cover;
+            display: flex;
+            align-items: end;
+            padding: 24px;
+        }
+
+        .story-main h3 {
+            margin: 0;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.1rem, 4vw, 4rem);
+            letter-spacing: 0.04em;
+        }
+
+        .story-side {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            overflow: hidden;
+        }
+
+        .story-side img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .story-side .content {
+            padding: 18px;
+        }
+
+        .story-side h4 {
+            margin: 0 0 8px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.7rem;
+            letter-spacing: 0.04em;
+            color: var(--green-soft);
+        }
+
+        .story-side p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        .registro {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 22px;
+            align-items: start;
+        }
+
+        .panel-form {
+            background: var(--panel);
+            border: 1px solid rgba(46,160,67,0.5);
+            border-radius: 22px;
+            padding: 24px;
+        }
+
+        .panel-form h3 {
+            margin: 0 0 18px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.4rem;
+            letter-spacing: 0.05em;
+            color: var(--green-soft);
+        }
+
+        form {
+            display: grid;
+            gap: 14px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--muted);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 10px;
+            background: #1c1c1c;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        input:focus {
+            outline: 2px solid rgba(46,160,67,0.8);
+            border-color: transparent;
+        }
+
+        .alert {
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .alert.success {
+            background: rgba(46,160,67,0.12);
+            border: 1px solid rgba(46,160,67,0.6);
+            color: #baf5c7;
+        }
+
+        .alert.error {
+            background: rgba(255,80,80,0.08);
+            border: 1px solid rgba(255,80,80,0.5);
+            color: #ffbdbd;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 11px 8px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            color: var(--muted);
+            vertical-align: top;
+        }
+
+        th {
+            color: var(--green-soft);
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .small {
+            margin-top: 18px;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        footer {
+            padding: 26px 5% 40px;
+            border-top: 1px solid var(--line);
+            text-align: center;
+            color: #8d8d8d;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            letter-spacing: 0.1em;
+        }
+
+        @media (max-width: 900px) {
+            .hero-inner,
+            .story,
+            .registro {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .topbar {
+                padding-inline: 20px;
+            }
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            .section {
+                width: min(1200px, calc(100% - 24px));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <strong>GROVE ST</strong>
+            <span>WALL STREET</span>
+        </div>
+
+        <nav class="nav">
+            <a href="/">Inicio</a>
+            <a href="/catalogo">Catálogo</a>
+            <a href="/admin">Admin</a>
+            <a href="#registro" class="cta">Únete</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-inner">
+                <div>
+                    <div class="eyebrow">Ropa ancha · streetwear</div>
+                    <h1>Streetwear que se siente bien.</h1>
+                    <p>Una colección más limpia, más oscura y más fuerte visualmente, con piezas anchas y un toque urbano inspirado en GTA San Andreas.</p>
+
+                    <div class="actions">
+                        <a href="/catalogo" class="btn">Ver catálogo</a>
+                        <a href="#registro" class="btn secondary">Registrarme</a>
+                    </div>
+
+                    <div class="stats">
+                        <div class="stat">
+                            <strong>120+</strong>
+                            <span>Piezas nuevas</span>
+                        </div>
+                        <div class="stat">
+                            <strong>4.9</strong>
+                            <span>Calificación</span>
+                        </div>
+                        <div class="stat">
+                            <strong>24h</strong>
+                            <span>Entrega rápida</span>
+                        </div>
+                    </div>
+                </div>
+
+                <aside class="panel">
+                    <h3>Grove Street</h3>
+                    <p>Más actitud, menos ruido. Piezas con identidad, cortes claros y una vibra muy urbana.</p>
+                    <div class="tags">
+                        <span>Los Santos</span>
+                        <span>San Fierro</span>
+                        <span>Las Venturas</span>
+                    </div>
+
+                    <div class="panel-visual">
+                        <img src="/static/IMG/logo.png" alt="GTA San Andreas look">
+                    </div>
+
+                    <button class="music" id="musicToggle" type="button">🎵 Música ambient</button>
+                    <audio id="gtaAudio" loop preload="none" src="../static/mp3/esta canción marcó la infancia de una generación.mp3"></audio>
+                </aside>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-head">
+                <h2>Lo más buscado</h2>
+                <p>Menos piezas, más impacto visual y una estética más premium para el estilo ancha.</p>
+            </div>
+
+            <div class="cards">
+                <a class="card" href="/gta-1">
+                    <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=80');">
+                        <span class="badge">Los Santos</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-tag">Urban basics</div>
+                        <h3>Grunge Oversize</h3>
+                        <div class="card-meta">
+                            <span>Sudadera premium</span>
+                            <span class="price">$1,299</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a class="card" href="/gta-2">
+                    <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=900&q=80');">
+                        <span class="badge">San Fierro</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-tag">Street fit</div>
+                        <h3>Metro Cargo</h3>
+                        <div class="card-meta">
+                            <span>Pantalón urbano</span>
+                            <span class="price">$1,599</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a class="card" href="/gta-3">
+                    <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=80');">
+                        <span class="badge">Las Venturas</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-tag">Minimal</div>
+                        <h3>Night Runner</h3>
+                        <div class="card-meta">
+                            <span>Chaqueta ligera</span>
+                            <span class="price">$1,899</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="story">
+                <div class="story-main">
+                    <h3>Street energy, clean finish.</h3>
+                </div>
+
+                <div class="story-side">
+                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80" alt="Lookbook">
+                    <div class="content">
+                        <h4>Lookbook</h4>
+                        <p>Blazers ligeros, piezas amplias, tonos sobrios y detalles que marcan el estilo sin saturar la vista.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="registro">
+            <div class="registro">
+                <div class="panel-form">
+                    <h3>Registro</h3>
+
+                    {% if mensaje %}
+                        <div class="alert success">{{ mensaje }}</div>
+                    {% endif %}
+
+                    {% if error %}
+                        <div class="alert error">{{ error }}</div>
+                    {% endif %}
+
+                    <form method="POST" action="/">
+                        <div>
+                            <label for="nombre">Nombre</label>
+                            <input type="text" id="nombre" name="nombre" required>
+                        </div>
+
+                        <div>
+                            <label for="correo">Correo</label>
+                            <input type="email" id="correo" name="correo" required>
+                        </div>
+
+                        <div>
+                            <label for="telefono">Teléfono</label>
+                            <input type="text" id="telefono" name="telefono" required>
+                        </div>
+
+                        <div>
+                            <label for="fecha_nac">Fecha de nacimiento</label>
+                            <input type="date" id="fecha_nac" name="fecha_nac" required>
+                        </div>
+
+                        <button type="submit" class="btn">Guardar registro</button>
+                    </form>
+                </div>
+
+                <div class="panel-form">
+                    <h3>Últimos registros</h3>
+
+                    {% if usuarios %}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Correo</th>
+                                    <th>Teléfono</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for usuario in usuarios %}
+                                    <tr>
+                                        <td>{{ usuario.nombre }}</td>
+                                        <td>{{ usuario.correo }}</td>
+                                        <td>{{ usuario.telefono }}</td>
+                                        <td>{{ usuario.fecha_registro }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p class="small">No hay registros todavía.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>WWW.WALLSTREET.COM</footer>
+
+    <script>
+        const musicToggle = document.getElementById('musicToggle');
+        const gtaAudio = document.getElementById('gtaAudio');
+
+        if (musicToggle && gtaAudio) {
+            musicToggle.addEventListener('click', () => {
+                if (gtaAudio.paused) {
+                    gtaAudio.play().catch(() => {
+                        musicToggle.textContent = '🎵 Música no disponible';
+                    });
+                    musicToggle.textContent = '⏸ Pausar música';
+                } else {
+                    gtaAudio.pause();
+                    musicToggle.textContent = '🎵 Música ambient';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;500;800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #0a0a0a; /* Modo oscuro premium */
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+}
+
+/* --- NAVBAR CON EFECTO BLUR --- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5%;
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(10px);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid #2ea043; /* Verde Grove St */
+}
+
+.logo strong {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    letter-spacing: 2px;
+    color: #fff;
+    text-shadow: 0 0 10px #2ea043;
+}
+
+.title {
+    font-family: 'Bebas Neue', sans-serif;
+    color: #2ea043;
+    font-size: 35px;
+    letter-spacing: 3px;
+}
+
+.menu-btn {
+    font-size: 28px;
+    background: none;
+    border: none;
+    color: #2ea043;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.menu-btn:hover {
+    transform: scale(1.2);
+}
+
+/* --- HERO SECTION (FONDO DEL JEAN CON OVERLAY) --- */
+.hero {
+    width: 100%;
+    height: 100vh;
+    /* OVERLAY OSCURO PARA QUE RESALTE EL TEXTO + TU FOTO */
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.4)), url('/static/img/image_840428.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Efecto Parallax */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-top: 80px;
+}
+
+.hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    letter-spacing: 5px;
+    text-shadow: 2px 2px 20px rgba(46, 160, 67, 0.8);
+}
+
+.hero p {
+    font-size: 18px;
+    font-weight: 300;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+}
+
+.btn-comprar {
+    padding: 15px 40px;
+    background-color: #2ea043;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 16px;
+    border-radius: 30px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px #2ea043;
+}
+
+.btn-comprar:hover {
+    background-color: #fff;
+    color: #000;
+    box-shadow: 0 0 25px #fff;
+    transform: translateY(-5px);
+}
+
+/* --- SECCIÓN CATÁLOGO (TARJETAS GAMER/URBANAS) --- */
+.fondo-catalogo {
+    padding: 120px 5% 50px;
+}
+
+.section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    text-align: center;
+    font-size: 50px;
+    margin-bottom: 40px;
+    color: #2ea043;
+}
+
+.grid-productos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.card {
+    background-color: #1a1a1a;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid #333;
+    transition: all 0.4s ease;
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 15px 30px rgba(46, 160, 67, 0.4);
+    border-color: #2ea043;
+}
+
+.card img {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.card:hover img {
+    transform: scale(1.08); /* La imagen hace un ligero zoom */
+}
+
+.card-info {
+    padding: 20px;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: linear-gradient(transparent, rgba(0,0,0,0.9) 20%, #000);
+}
+
+.card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 2px;
+    color: #fff;
+}
+
+/* --- FOOTER --- */
+footer {
+    background-color: #050505;
+    border-top: 1px solid #2ea043;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+footer p {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 3px;
+    color: #555;
+}
+
+/* --- RESPONSIVO --- */
+@media (max-width: 768px) {
+    .hero h1 { font-size: 50px; }
+    .card img { height: 350px; }
+    .title { font-size: 25px; }
+}
